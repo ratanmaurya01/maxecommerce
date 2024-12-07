@@ -25,7 +25,6 @@ export default function Navbar() {
                         My Logo
                     </NavLink>
 
-                    {/* Mobile Menu Button */}
                     <div className="flex md:hidden">
                         <button
                             onClick={toggleMenu}
@@ -57,7 +56,6 @@ export default function Navbar() {
                         </button>
                     </div>
 
-                    {/* Navigation Links */}
                     <div
                         className={`${isOpen ? 'block' : 'hidden'} md:flex md:items-center md:space-x-6 absolute md:relative top-16 md:top-0 left-0 w-full md:w-auto bg-blue-600 md:bg-transparent md:flex-row md:space-x-4 p-4 md:p-0`}
                     >
@@ -89,20 +87,19 @@ export default function Navbar() {
                             />
                         </div>
 
-                        {/* Links */}
                         <NavLink
                             to="#"
                             className="block py-2 px-4 rounded-md hover:bg-blue-500"
                             onClick={closeMenu}
                         >
-                            Seller/Buyer
+                            A
                         </NavLink>
                         <NavLink
                             to="#"
                             className="block py-2 px-4 rounded-md hover:bg-blue-500"
                             onClick={closeMenu}
                         >
-                            Products
+                            B
                         </NavLink>
                         <NavLink
                             to="#"

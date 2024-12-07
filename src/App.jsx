@@ -12,7 +12,6 @@ function App() {
             <div className="navbar-container">
                 <Navbar />
             </div>
-            {/* Add consistent spacing for all pages */}
             <div className="content-container">
                 <Routes>
                     <Route path="/" element={<Home />} />
