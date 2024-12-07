@@ -1,8 +1,21 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { NavLink , useNavigate } from 'react-router-dom';
+import { useUser } from '../context/authUser';
 
 export default function Navbar() {
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
+    const { user, logout } = useUser(); // Access user and logout from context
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+
+    const handlogOut = () => {
+        logout();
+       navigate('/');
+        
+    }
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -12,11 +25,39 @@ export default function Navbar() {
         setIsOpen(false);
     };
 
+    // Toggles dropdown visibility
+    const toggleDropdown = () => {
+        setIsDropdownOpen((prev) => !prev);
+    };
+
+    // Closes dropdown
+    const closeDropdown = () => {
+        setIsDropdownOpen(false);
+    };
+
+    // Handles clicks outside the dropdown
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
+                closeDropdown();
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+
+
     return (
         <nav className="bg-blue-600 text-white shadow-md fixed w-full z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
-                    {/* Logo */}
                     <NavLink
                         to="/"
                         className="text-2xl font-bold"
@@ -24,7 +65,6 @@ export default function Navbar() {
                     >
                         My Logo
                     </NavLink>
-
                     <div className="flex md:hidden">
                         <button
                             onClick={toggleMenu}
@@ -55,11 +95,9 @@ export default function Navbar() {
                             </svg>
                         </button>
                     </div>
-
                     <div
                         className={`${isOpen ? 'block' : 'hidden'} md:flex md:items-center md:space-x-6 absolute md:relative top-16 md:top-0 left-0 w-full md:w-auto bg-blue-600 md:bg-transparent md:flex-row md:space-x-4 p-4 md:p-0`}
                     >
-                        {/* Search Input */}
                         <div className="relative md:block mb-4 md:mb-0">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <svg
@@ -108,13 +146,92 @@ export default function Navbar() {
                         >
                             Contact Us
                         </NavLink>
-                        <NavLink
-                            to="#"
-                            className="block py-2 px-4 rounded-md hover:bg-blue-500"
-                            onClick={closeMenu}
-                        >
-                            Services
-                        </NavLink>
+
+                        {user ? (
+
+
+                            <div className="relative" ref={dropdownRef}>
+                                {/* Dashboard Toggle */}
+                                <NavLink
+                                    to="#"
+                                    className="block py-2 px-4 rounded-md hover:bg-blue-500"
+                                    onClick={toggleDropdown}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <img
+                                            id="avatarButton"
+                                            className="w-10 h-10 rounded-full cursor-pointer"
+                                            src="/docs/images/people/profile-picture-5.jpg"
+                                            alt="User dropdown"
+                                        />
+                                        Dashboard
+                                    </div>
+                                </NavLink>
+
+                                {/* Dropdown */}
+                                {isDropdownOpen && (
+                                    <div
+                                        id="userDropdown"
+                                        className="absolute z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+                                    >
+                                        <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                                            <div>Bonnie Green</div>
+                                            <div className="font-medium truncate">
+                                                name@flowbite.com
+                                            </div>
+                                        </div>
+                                        <ul
+                                            className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                            aria-labelledby="avatarButton"
+                                        >
+                                            <li>
+                                                <a
+                                                    href="#"
+                                                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                                >
+                                                    Dashboard
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a
+                                                    href="#"
+                                                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                                >
+                                                    Settings
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a
+                                                    href="#"
+                                                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                                >
+                                                    Earnings
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div className="py-1">
+                                            <p
+                                                onClick={handlogOut}
+                                                className="block px-4 cursor-pointer py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                                            >
+                                                Sign out
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <>
+                                <NavLink
+                                    to="/login"
+                                    className="block py-2 px-4 rounded-md hover:bg-blue-500"
+                                    onClick={closeMenu}
+                                >
+                                    Login
+                                </NavLink>
+                            </>
+                        )}
+
                     </div>
                 </div>
             </div>

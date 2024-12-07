@@ -2,19 +2,26 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../Firebase';
+import { useUser } from '../context/authUser';
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useUser(); // Get the login function from context
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setError('')
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
-            console.log(response);
-            navigate('/'); // Redirect to home page
+            console.log(response.user);
+            
+            // Store the user data in context
+            login(response.user);
+            navigate('/Profile'); // Redirect to home page
         } catch (error) {
+            console.log('error',error)
             setError('Invalid email or password');
         }
     };

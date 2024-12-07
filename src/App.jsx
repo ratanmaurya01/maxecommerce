@@ -4,6 +4,7 @@ import Home from './Page/Home';
 import Navbar from './Navbar/navbar';
 import Login from './Auth/Login';
 import Singin from './Auth/Singin';
+import Profile from './Auth/Profile';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Signin" element={<Singin />} />
+                    <Route path="/Profile" element={<Profile />} />
                 </Routes>
             </div>
         </Router>
