@@ -3,6 +3,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/authUser';
 import Cancel from '../Model/Cancel';
 import ProfileIcon from '../Image/Profile.png'
+import { FiShoppingCart } from 'react-icons/fi'; // Import the cart icon
+
 
 export default function Navbar() {
     const navigate = useNavigate();
@@ -10,7 +12,9 @@ export default function Navbar() {
     const { user, logout } = useUser(); // Access user and logout from context
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isModelOpen, setIsModelOpen] = useState(false);
+    //  const [cartCount, setCard] = useState(0);
     const dropdownRef = useRef(null);
+    let cartCount = 0;
 
     const handlogOut = () => {
         setIsModelOpen(true);
@@ -147,19 +151,23 @@ export default function Navbar() {
                             >
                                 B
                             </NavLink>
-                            <NavLink
-                                to="#"
-                                className="block py-2 px-4 rounded-md hover:bg-blue-500"
-                                onClick={closeMenu}
-                            >
-                                Contact Us
-                            </NavLink>
 
+                            <div className="relative inline-block">
+                                <p
+                                    className=" py-4 px-3 rounded-md hover:bg-blue-500 flex items-center"
+                                    onClick={closeMenu}
+                                >
+                                    <FiShoppingCart className="mr-2 text-xl" />
+                                    <span
+                                        className="absolute  right-3 bg-red-500 text-white  font-bold rounded-full px-2 py-0.1 transform translate-x-1/2 -translate-y-1/2"
+                                    >
+                                        {cartCount}
+                                    </span>
+
+                                </p>
+                            </div>
                             {user ? (
-
-
                                 <div className="relative" ref={dropdownRef}>
-                                    {/* Dashboard Toggle */}
                                     <NavLink
                                         to="#"
                                         className="block py-2 px-4 rounded-md hover:bg-blue-500"
@@ -175,17 +183,15 @@ export default function Navbar() {
                                             Dashboard
                                         </div>
                                     </NavLink>
-
-                                    {/* Dropdown */}
                                     {isDropdownOpen && (
                                         <div
                                             id="userDropdown"
                                             className="absolute z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
                                         >
                                             <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                                                <div>{user?.displayName  || "N/A"}</div>
+                                                <div>{user?.displayName || "N/A"}</div>
                                                 <div className="font-medium truncate">
-                                                     {user?.email}
+                                                    {user?.email}
                                                 </div>
                                             </div>
                                             <ul
@@ -202,11 +208,11 @@ export default function Navbar() {
                                                     </NavLink>
                                                 </li>
                                                 <li>
-                                                  
+
                                                     <NavLink
-                                                     to="/Addproduct"
-                                                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                                    onClick={closeDropdown}
+                                                        to="/Addproduct"
+                                                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                                        onClick={closeDropdown}
                                                     >
                                                         Add Product
                                                     </NavLink>
@@ -224,8 +230,8 @@ export default function Navbar() {
                                                 <p
                                                     onClick={handlogOut}
                                                     className="block px-4 cursor-pointer py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                             
-                                            >
+
+                                                >
                                                     Sign out
                                                 </p>
                                             </div>
