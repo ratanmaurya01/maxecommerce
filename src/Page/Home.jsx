@@ -32,10 +32,11 @@ export default function Home() {
     return (
 
         <>
-            <div>
-
+            <div className="mb-5 relative">
                 <Slider />
             </div>
+
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-3 py-3">
 
                 {isLoading
@@ -105,6 +106,7 @@ export default function Home() {
                         ))}
             </div>
 
+ 
         </>
     );
 }
