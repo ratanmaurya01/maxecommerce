@@ -1,49 +1,65 @@
-import React, { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../Firebase";
+import React from "react";
+
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Slider from "./Slider";
-
+import { useSelector } from "react-redux";
 export default function Home() {
-    const [products, setProducts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    // Fetch products from Firestore
-    const fetchProducts = async () => {
-        try {
-            const querySnapshot = await getDocs(collection(db, "products"));
-            const productList = querySnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setProducts(productList); // Store the fetched products
-        } catch (error) {
-            console.error("Error fetching products:", error.message);
-        } finally {
-            setIsLoading(false); // Stop loading once the data is fetched
-        }
-    };
-
-    useEffect(() => {
-        fetchProducts(); // Fetch products when the component mounts
-    }, []);
-
+    const { items: products, loading } = useSelector((state) => state.products)
+   
     return (
-
         <>
             <div className="mb-5 relative">
                 <Slider />
             </div>
-
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-3 py-3">
+                {loading
+                    ? Array.from({ length: 8 }).map((_, index) => (
+                        <div key={index} className="max-w-sm bg-white border border-gray-200 rounded-xl shadow">
+                            <Skeleton height={260} />
+                            <div className="p-2">
+                                <Skeleton height={24} width="80%" />
+                                <Skeleton height={24} width="40%" />
+                            </div>
+                        </div>
+                    ))
+                    : products.length === 0
+                        ? <div>No products available</div>
+                        : products.map((product) => (
+                            <div
+                                key={product.id}
+                                className="py-0 max-w-sm bg-white border border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700"
+                            >
+                                <a href="#">
+                                    <img
+                                        className="rounded-t-sm w-full h-48 object-cover rounded-xl"
+                                        src={product.images && product.images[0] ? `${product.images[0]}?${new Date().getTime()}` : 'https://via.placeholder.com/300'}
+                                        alt={product.name}
+                                    />
+                                </a>
+                                <div className="p-2">
+                                    <h5 className="mb-1 tracking-tight text-gray-900 dark:text-white">{product.name}</h5>
+                                    <div className="flex justify-between">
+                                        <p className="font-normal text-gray-700 dark:text-gray-400">₹{product.price}</p>
+                                        <a
+                                            href="#"
+                                            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800"
+                                        >
+                                            Add to Cart
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+            </div>
 
+
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-3 py-3 ">
                 {isLoading
                     ? Array.from({ length: 8 }).map((_, index) => (
                         <div
                             key={index}
-                            className="max-w-sm  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                            className="max-w-sm  bg-white border border-gray-200 rounded-xl shadow dark:bg-gray-800 dark:border-gray-700"
                         >
                             <Skeleton height={260} />
                             <div className="p-2">
@@ -53,18 +69,16 @@ export default function Home() {
                         </div>
                     ))
                     : products.length === 0
-                        ? <div>No products available</div> // Show message if no products are found
+                        ? <div>No products available</div>
                         : products.map((product) => (
-
                             <>
-
                                 <div
                                     key={product.id}
-                                    className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                                    className="py-0  max-w-sm bg-white border border-gray-200  shadow dark:bg-gray-800 dark:border-gray-700"
                                 >
                                     <a href="#">
                                         <img
-                                            className="rounded-t-sm w-full h-64 object-cover"
+                                            className="rounded-t-sm w-full h-48 object-cover rounded-xl"
                                             src={product.images && product.images[0] ? `${product.images[0]}?${new Date().getTime()}` : 'https://via.placeholder.com/300'} // Fallback image if no image exists
                                             alt={product.name}
                                         />
@@ -104,9 +118,9 @@ export default function Home() {
                             </>
 
                         ))}
-            </div>
+            </div> */}
 
- 
+
         </>
     );
 }

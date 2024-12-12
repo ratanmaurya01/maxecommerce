@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Page/Home';
 import Navbar from './Navbar/navbar';
@@ -7,9 +7,18 @@ import Singin from './Auth/Singin';
 import Profile from './Auth/Profile';
 import AddProduct from './Admin/AddProduct';
 import ManageProducts from './Admin/ManageProduct';
-
+import { useDispatch } from 'react-redux';
+import { fetchProducts } from './redux/productSlice';
 
 function App() {
+ 
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(fetchProducts());
+    },[dispatch]);
+
+
     return (
         <Router>
             <div className="navbar-container">

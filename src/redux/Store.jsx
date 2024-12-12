@@ -1,14 +1,11 @@
-import React from 'react'
+import { configureStore } from '@reduxjs/toolkit';
+import productReducer from './productSlice';
 
-function Store() {
-  return (
-    <div>
-      
-        <div>
-            app dispathcer 
-        </div>
-    </div>
-  )
-}
+const store = configureStore({
+  reducer: {
+    products: productReducer,
+  },
+});
 
-export default Store
+export default store;
+

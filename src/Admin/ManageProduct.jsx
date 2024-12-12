@@ -145,7 +145,7 @@ const ManageProducts = () => {
 
             const parsedPrice = parseFloat(form.price);
             const parsedStock = parseInt(form.stock, 10);
-
+            
             if (isNaN(parsedPrice) || isNaN(parsedStock)) {
                 alert("Price and Stock must be valid numbers.");
                 return;

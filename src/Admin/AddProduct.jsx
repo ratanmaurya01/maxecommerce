@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useUser } from "../context/authUser";
 
 const AddProduct = () => {
   const [form, setForm] = useState({
@@ -17,21 +18,24 @@ const AddProduct = () => {
   const [uploading, setUploading] = useState(false); // To track upload progress
   const [error, setError] = useState(null); // To display any error during image upload
 
+  const  {user} = useUser(); 
+  
+  
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
+
 
   const handleImageUpload = (e) => {
     const files = e.target.files;
     const uploadedImages = [];
     setUploading(true);
     setError(null);
-
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const storageRef = ref(storage, `images/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
-
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -44,7 +48,6 @@ const AddProduct = () => {
         async () => {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           uploadedImages.push(downloadURL);
-
           if (uploadedImages.length === files.length) {
             setUploading(false);
             setForm((prevForm) => ({ ...prevForm, images: uploadedImages }));
@@ -53,6 +56,7 @@ const AddProduct = () => {
       );
     }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,6 +86,7 @@ const AddProduct = () => {
         ...form,
         price: parsedPrice,
         stock: parsedStock,
+        email: user?.email,
         createdAt: serverTimestamp(),
       });
 

@@ -10,7 +10,6 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true); // Add loading state to handle async user fetching
-
     const login = (userData) => {
         setUser(userData);
     };
@@ -24,7 +23,7 @@ export const UserProvider = ({ children }) => {
             console.error('Error during logout:', error.message);
         }
     };
-
+    
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
             if (firebaseUser) {
@@ -38,11 +37,6 @@ export const UserProvider = ({ children }) => {
         // Clean up the listener on component unmount
         return () => unsubscribe();
     }, []);
-
-    // if (loading) {
-    //     return <div>Loading...</div>; // Optional: Show a loader while user state is being determined
-    // }
-
     return (
         <UserContext.Provider value={{ user, login, logout }}>
             {children}
@@ -50,5 +44,4 @@ export const UserProvider = ({ children }) => {
     );
 };
 
-// Custom hook to use the user context
 export const useUser = () => useContext(UserContext);
