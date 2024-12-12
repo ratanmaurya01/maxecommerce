@@ -6,7 +6,8 @@ import Slider from "./Slider";
 import { useSelector } from "react-redux";
 export default function Home() {
     const { items: products, loading } = useSelector((state) => state.products)
-   
+    
+      console.log("product ", products)
     return (
         <>
             <div className="mb-5 relative">

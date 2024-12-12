@@ -4,28 +4,30 @@ import { auth } from '../Firebase'; // Import Firebase auth instance
 import { signOut } from 'firebase/auth';
 
 // Create the context
+
 const UserContext = createContext();
 
 // Create a provider for the context
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true); // Add loading state to handle async user fetching
+    const [loading, setLoading] = useState(true); 
     const login = (userData) => {
         setUser(userData);
     };
-
     const logout =async () => {
-       
+
         try {
-            await signOut(auth); // Sign out the user from Firebase
-            setUser(null); // Clear the user from context
+            await signOut(auth); 
+            setUser(null); 
         } catch (error) {
             console.error('Error during logout:', error.message);
         }
     };
-    
+
     useEffect(() => {
+
         const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+
             if (firebaseUser) {
                 setUser(firebaseUser);
             } else {
@@ -35,6 +37,7 @@ export const UserProvider = ({ children }) => {
         });
 
         // Clean up the listener on component unmount
+
         return () => unsubscribe();
     }, []);
     return (
