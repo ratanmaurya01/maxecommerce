@@ -9,6 +9,7 @@ import AddProduct from './Admin/AddProduct';
 import ManageProducts from './Admin/ManageProduct';
 import { useDispatch } from 'react-redux';
 import { fetchProducts } from './redux/productSlice';
+import ProductDetails from './Product/ProductDetails';
 
 function App() {
  
@@ -32,6 +33,7 @@ function App() {
                     <Route path="/Profile" element={<Profile />} />
                     <Route path="/Addproduct" element={<AddProduct />} />
                     <Route path="/Manageproduct" element={<ManageProducts />} />
+                    <Route path="/product/:id" element={<ProductDetails />} />
                 </Routes>
             </div>
         </Router>

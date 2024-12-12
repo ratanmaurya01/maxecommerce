@@ -4,10 +4,14 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Slider from "./Slider";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 export default function Home() {
+    const navigate = useNavigate();
     const { items: products, loading } = useSelector((state) => state.products)
-    
-      console.log("product ", products)
+    console.log("product ", products)
+    const handleClickProductDetails = (id) => {
+        navigate(`/product/${id}`);
+    }
     return (
         <>
             <div className="mb-5 relative">
@@ -29,15 +33,17 @@ export default function Home() {
                         : products.map((product) => (
                             <div
                                 key={product.id}
+                                onClick={() => handleClickProductDetails(product.id)}
                                 className="py-0 max-w-sm bg-white border border-gray-200 shadow dark:bg-gray-800 dark:border-gray-700"
                             >
-                                <a href="#">
+                                <div>
                                     <img
                                         className="rounded-t-sm w-full h-48 object-cover rounded-xl"
                                         src={product.images && product.images[0] ? `${product.images[0]}?${new Date().getTime()}` : 'https://via.placeholder.com/300'}
                                         alt={product.name}
                                     />
-                                </a>
+                                </div>
+
                                 <div className="p-2">
                                     <h5 className="mb-1 tracking-tight text-gray-900 dark:text-white">{product.name}</h5>
                                     <div className="flex justify-between">
