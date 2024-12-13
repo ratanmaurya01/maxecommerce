@@ -5,10 +5,11 @@ import "react-loading-skeleton/dist/skeleton.css";
 import Slider from "./Slider";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import FeatureCard from "./FeatureCard";
 export default function Home() {
     const navigate = useNavigate();
     const { items: products, loading } = useSelector((state) => state.products)
-    console.log("product ", products)
+  //  console.log("product ", products)
     const handleClickProductDetails = (id) => {
         navigate(`/product/${id}`);
     }
@@ -16,6 +17,9 @@ export default function Home() {
         <>
             <div className="mt-5 mb-5 relative ">
                 <Slider />
+            </div>
+            <div>
+                <FeatureCard />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-3 py-3">
                 {loading
