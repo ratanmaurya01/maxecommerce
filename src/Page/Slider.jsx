@@ -35,9 +35,9 @@ function IconSlider() {
     return (
         <>
 
-            <div className="w-full" data-carousel="slide">
+            <div className="w-full px-3  " data-carousel="slide">
 
-                <div className="relative flex h-60 sm:h-80 md:h-96 lg:h-[200px] overflow-hidden rounded-sm">
+                <div className="relative flex h-40 sm:h-80 md:h-96 lg:h-[200px] overflow-hidden rounded-lg shadow-md">
                     {slides.map((slide, index) => (
                         <div
                             key={index}
@@ -68,7 +68,7 @@ function IconSlider() {
 
                 <button
                     type="button"
-                    className="absolute top-1/2 left-0 z-30 flex items-center justify-center h-10 w-10 transform -translate-y-1/2 cursor-pointer group focus:outline-none"
+                    className="absolute top-1/2 left-3 z-30 flex items-center justify-center h-10 w-10 transform -translate-y-1/2 cursor-pointer group focus:outline-none"
                     onClick={goToPrevSlide}
                     data-carousel-prev
                 >
@@ -94,7 +94,7 @@ function IconSlider() {
 
                 <button
                     type="button"
-                    className="absolute top-1/2 right-0 z-30 flex items-center justify-center h-10 w-10 transform -translate-y-1/2 cursor-pointer group focus:outline-none"
+                    className="absolute top-1/2 right-3 z-30 flex items-center justify-center h-10 w-10 transform -translate-y-1/2 cursor-pointer group focus:outline-none"
                     onClick={goToNextSlide}
                     data-carousel-next
                 >
@@ -119,9 +119,6 @@ function IconSlider() {
                 </button>
 
             </div>
-
-
-
 
         </>
     );
