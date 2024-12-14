@@ -395,7 +395,6 @@ export default function Navbar() {
                             <input
                                 type="text"
                                 id="search-navbar"
-                            
                                 className="cursor-pointer  block w-72 p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Search...                                 CTRL+K"
  
