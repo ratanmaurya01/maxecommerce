@@ -1,6 +1,7 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
+import { addToCart } from '../redux/cartSlice';
 
 
 function ProductDetails() {
@@ -8,11 +9,17 @@ function ProductDetails() {
     const { items: products } = useSelector((state) => state.products);
 
     const product = products.find((product) => product.id === id);
-    
+
     if (!product) {
         return <div>Product not available </div>
     }
 
+
+    const dispatch = useDispatch();
+    const handleAddtoCart = () => {
+        dispatch(addToCart(product));
+    }
+    
     return (
         <div>
             <section className="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased">
@@ -28,14 +35,12 @@ function ProductDetails() {
                         </div>
 
                         <div className="mt-6 sm:mt-8 lg:mt-0">
-                            <h1
-                                className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
+                            <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
                             >
                                 {product.description}
                             </h1>
                             <div className="mt-4 sm:items-center sm:gap-4 sm:flex">
-                                <p
-                                    className="text-2xl font-extrabold text-gray-900 sm:text-3xl dark:text-white"
+                                <p className="text-2xl font-extrabold text-gray-900 sm:text-3xl dark:text-white"
                                 >
                                     ₹{product.price}
                                 </p>
@@ -114,7 +119,6 @@ function ProductDetails() {
                                         (5.0)
                                     </p>
                                     <p
-
                                         className="text-sm font-medium leading-none text-gray-900 underline hover:no-underline dark:text-white"
                                     >
                                         345 Reviews
@@ -124,7 +128,6 @@ function ProductDetails() {
 
                             <div className="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
                                 <p
-
                                     title=""
                                     className="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                     role="button"
@@ -149,10 +152,10 @@ function ProductDetails() {
                                     Add to favorites
                                 </p>
                                 <p
-
                                     title=""
                                     className="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 flex items-center justify-center"
                                     role="button"
+                                    onClick={handleAddtoCart}
                                 >
                                     <svg
                                         className="w-5 h-5 -ms-2 me-2"
@@ -171,7 +174,6 @@ function ProductDetails() {
                                             d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
                                         />
                                     </svg>
-
                                     Add to cart
                                 </p>
                             </div>
@@ -186,91 +188,83 @@ function ProductDetails() {
                                 Wi-Fi 6 and Bluetooth 5.0 wireless. Color matched Magic Mouse with
                                 Magic Keyboard or Magic Keyboard with Touch ID.
                             </p>
-
                             <div>
-                                <div class="relative overflow-x-auto py-5">
-                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <div className="relative overflow-x-auto py-5">
+                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                             <tr>
-                                                <th scope="col" class="px-6 py-3">
+                                                <th scope="col" className="px-6 py-3">
                                                     Product name
                                                 </th>
-                                                <th scope="col" class="px-6 py-3">
+                                                <th scope="col" className="px-6 py-3">
                                                     Color
                                                 </th>
-                                                <th scope="col" class="px-6 py-3">
+                                                <th scope="col" className="px-6 py-3">
                                                     Category
                                                 </th>
-                                                <th scope="col" class="px-6 py-3">
+                                                <th scope="col" className="px-6 py-3">
                                                     Price
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class=" bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <tr className=" bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                     Apple MacBook Pro 17"
                                                 </th>
-                                                <td class="px-6 py-4">
+                                                <td className="px-6 py-4">
                                                     Silver
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td className="px-6 py-4">
                                                     Laptop
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td className="px-6 py-4">
                                                     $2999
                                                 </td>
                                             </tr>
-                                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                     Microsoft Surface Pro
                                                 </th>
-                                                <td class="px-6 py-4">
+                                                <td className="px-6 py-4">
                                                     White
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td className="px-6 py-4">
                                                     Laptop PC
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td className="px-6 py-4">
                                                     $1999
                                                 </td>
                                             </tr>
-                                            <tr class="bg-white dark:bg-gray-800">
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <tr className="bg-white dark:bg-gray-800">
+                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                     Magic Mouse 2
                                                 </th>
-                                                <td class="px-6 py-4">
+                                                <td className="px-6 py-4">
                                                     Black
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td className="px-6 py-4">
                                                     Accessories
                                                 </td>
-                                                <td class="px-6 py-4">
+                                                <td className="px-6 py-4">
                                                     $99
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
-
-
                 <div className='py-8 px-8'>
                     <div>
-                    <h6>
-                         Related Products
-                    </h6>
+                        <h6>
+                            Related Products
+                        </h6>
                     </div>
                 </div>
-
             </section>
-
-
         </div>
     )
 }

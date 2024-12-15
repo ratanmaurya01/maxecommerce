@@ -1,20 +1,20 @@
-import React, { useState , useEffect } from "react";
-import {
-    deleteDoc,
-    doc,
-    updateDoc,
-} from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { deleteDoc, doc, updateDoc, } from "firebase/firestore";
 import { db } from "../Firebase";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useDispatch, useSelector } from 'react-redux';
 import { useUser } from "../context/authUser";
-import {fetchProducts,  updateProduct, deleteProduct } from "../redux/productSlice";
+import { fetchProducts, updateProduct, deleteProduct } from "../redux/productSlice";
+import Cancel from "../Model/Cancel";
+import toast, { Toaster } from 'react-hot-toast';
 
 const ManageProducts = () => {
     const dispatch = useDispatch();
     const { user } = useUser();
-    const userEmail = user?.email
+    const userEmail = user?.email;
+    const [deleteId, setDeleteId] = useState(null); // State to store the ID to delete
     const [editingProduct, setEditingProduct] = useState(null);
+    const [isModelOpen, setIsModelOpen] = useState(false);
     const [form, setForm] = useState({
         name: "",
         price: "",
@@ -25,47 +25,42 @@ const ManageProducts = () => {
         image: "",  // Add image state
     });
 
-      // Fetch products on component mount
-      useEffect(() => {
+    // Fetch products on component mount
+    useEffect(() => {
         dispatch(fetchProducts());
     }, [dispatch]);
 
     const [newImage, setNewImage] = useState(null);  // For storing new image before upload
     const storage = getStorage();
-
     const { items: products, loading } = useSelector((state) => state.products);
-   
-    console.log("object", products)
     const product = products.filter((product) => product.email === userEmail);
-
-
-    // Handle delete product
     const handleDelete = async (id) => {
-        if (window.confirm("Are you sure you want to delete this product?")) {
-            try {
-                await deleteDoc(doc(db, "products", id));
+        setIsModelOpen(true);
+        setDeleteId(id);
+    }
 
-                // Update Redux store
-                dispatch(deleteProduct(id));
-                alert("Product deleted successfully.");
-            } catch (error) {
-                console.error("Error deleting product: ", error.message);
-                alert("Failed to delete product.");
-            }
+    const handleConfirm = async () => {
+        try {
+            await deleteDoc(doc(db, "products", deleteId)); // Use deleteId here
+            // Update Redux store
+            dispatch(deleteProduct(deleteId));
+            toast("Product deleted successfully.");
+        } catch (error) {
+            console.error("Error deleting product: ", error.message);
+            toast.error("Failed to delete product.");
+        } finally {
+            setIsModelOpen(false); // Close the modal
+            setDeleteId(null); // Reset the ID state
         }
     };
 
     // Start editing a product
     const handleEdit = (product) => {
         setEditingProduct(product.id);
-        // setForm(product);
-
         setForm({
             ...product,
             image: product.images, // Set the existing image to form state
         });
-
-
     };
 
     // Cancel editing
@@ -99,7 +94,8 @@ const ManageProducts = () => {
             return imageUrl;
         } catch (error) {
             console.error("Error uploading image: ", error.message);
-            alert("Failed to upload image.");
+            toast.error("Failed to upload image.");
+            
             return null;
         }
     };
@@ -115,14 +111,16 @@ const ManageProducts = () => {
                 !form.category ||
                 !form.stock
             ) {
-                alert("Please fill in all fields.");
+                // alert("Please fill in all fields.");
+                toast.error('Please fill in all fields.');
                 return;
             }
             const parsedPrice = parseFloat(form.price);
             const parsedStock = parseInt(form.stock, 10);
 
             if (isNaN(parsedPrice) || isNaN(parsedStock)) {
-                alert("Price and Stock must be valid numbers.");
+                // alert("Price and Stock must be valid numbers.");
+                toast.error("Price and Stock must be valid numbers.");
                 return;
             }
 
@@ -147,21 +145,19 @@ const ManageProducts = () => {
 
             // Update Redux store
             dispatch(updateProduct({ id: editingProduct, ...updatedProduct }));
-
-            alert("Product updated successfully!");
+            toast("Product Save succesfully");
             handleCancel();
         } catch (error) {
             console.error("Error updating product: ", error.message);
             alert("Failed to update product.");
+            toast.error('Failed to update product.');
         }
     };
 
     return (
+
         <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
             <h2 className="text-2xl font-bold mb-6">Manage Products</h2>
-
-
-
             {loading ? (
                 // Skeleton Loader
                 <div className="overflow-x-auto">
@@ -334,6 +330,21 @@ const ManageProducts = () => {
                     </form>
                 </div>
             )}
+            {isModelOpen && (
+                <Cancel
+                    onClose={() => setIsModelOpen(false)}
+                    onConfirm={handleConfirm}
+                    message="Are you sure want to Delete."
+                />
+            )}
+
+
+            <div>
+                <Toaster
+                    position="top-center"
+                    reverseOrder={false}
+                />
+            </div>
         </div>
     );
 };

@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../Firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import { useUser } from "../context/authUser";
+import { useDispatch } from 'react-redux';
+import { addProduct } from "../redux/productSlice";
+import toast, { Toaster } from 'react-hot-toast';
 
 const AddProduct = () => {
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     name: "",
     price: "",
@@ -18,9 +22,8 @@ const AddProduct = () => {
   const [uploading, setUploading] = useState(false); // To track upload progress
   const [error, setError] = useState(null); // To display any error during image upload
 
-  const  {user} = useUser(); 
-  
-  
+  const { user } = useUser();
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -59,6 +62,7 @@ const AddProduct = () => {
 
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     try {
       if (
@@ -70,7 +74,7 @@ const AddProduct = () => {
         !form.stock ||
         form.images.length === 0
       ) {
-        alert("Please fill in all fields.");
+        toast.error("Please fill in all fields.");
         return;
       }
 
@@ -90,7 +94,21 @@ const AddProduct = () => {
         createdAt: serverTimestamp(),
       });
 
-      alert("Product added successfully!");
+         // Dispatch addProduct to Redux store
+    const newProduct = {
+      ...form,
+      price: parsedPrice,
+      email: user?.email,
+      stock: parsedStock,
+      createdAt: new Date().toISOString(), // Use current time since serverTimestamp can't be directly retrieved
+    };
+
+    dispatch(addProduct(newProduct));
+
+
+
+
+      toast("Product added successfully!");
       setForm({
         name: "",
         price: "",
@@ -100,9 +118,11 @@ const AddProduct = () => {
         stock: "",
         images: [],
       });
+
+
     } catch (error) {
       console.error("Error adding product: ", error.message);
-      alert("Failed to add product.");
+      toast.error("Failed to add product.");
     }
   };
 
@@ -196,6 +216,13 @@ const AddProduct = () => {
           Add Product
         </button>
       </form>
+
+      <div>
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+        />
+      </div>
     </div>
   );
 };

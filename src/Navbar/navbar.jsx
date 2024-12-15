@@ -274,6 +274,7 @@ import Cancel from '../Model/Cancel';
 import ProfileIcon from '../Image/Profile.png';
 import { FiShoppingCart } from 'react-icons/fi'; // Import the cart icon
 import Search from '../Model/Search';
+import { useSelector } from 'react-redux';
 
 export default function Navbar() {
     const navigate = useNavigate();
@@ -283,7 +284,9 @@ export default function Navbar() {
     const [isModelOpen, setIsModelOpen] = useState(false);
     const [isSearchModel, setIsSearchModel] = useState(false);
     const dropdownRef = useRef(null);
-    let cartCount = 0;
+      
+    const cartItems = useSelector((state) => state.cart.items);
+    const cartCount = cartItems.length; // Calculate cart count
 
     const handlogOut = () => {
         setIsModelOpen(true);
@@ -353,7 +356,7 @@ export default function Navbar() {
         };
     }, []);
 
-
+    
     return (
         <>
             <nav className="bg-blue-600 text-white shadow-md fixed w-full z-50">
@@ -431,7 +434,8 @@ export default function Navbar() {
                             <div className="relative inline-block cursor-pointer">
                                 <p
                                     className="py-4 px-3 rounded-md hover:bg-blue-500 flex items-center"
-                                    onClick={closeMenu}
+                                    onClick={() => navigate('/CartPage')}
+
                                 >
                                     <FiShoppingCart className="mr-2 text-xl" />
                                     <span
