@@ -2,13 +2,13 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
 
-function ProductDetails() {
 
+function ProductDetails() {
     const { id } = useParams();
     const { items: products } = useSelector((state) => state.products);
 
     const product = products.find((product) => product.id === id);
-
+    
     if (!product) {
         return <div>Product not available </div>
     }

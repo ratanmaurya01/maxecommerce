@@ -28,6 +28,7 @@ export default function Search({ onClose }) {
     }, [onClose]);
 
 
+    
     return (
         <>
 

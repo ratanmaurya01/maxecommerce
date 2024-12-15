@@ -335,7 +335,6 @@ export default function Navbar() {
         setIsSearchModel(false);
     };
 
-
     // Add keyboard shortcut for Ctrl + K
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -492,6 +491,17 @@ export default function Navbar() {
                                                         Add Product
                                                     </NavLink>
                                                 </li>
+
+                                                <li>
+                                                    <NavLink
+                                                        to="/Manageproduct"
+                                                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                                        onClick={closeDropdown}
+                                                    >
+                                                        Manage Product
+                                                    </NavLink>
+                                                </li>
+
                                             </ul>
                                             <div className="py-1">
                                                 <p

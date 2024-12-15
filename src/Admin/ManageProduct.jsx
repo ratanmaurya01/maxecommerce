@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState , useEffect } from "react";
 import {
-    collection,
-    getDocs,
     deleteDoc,
     doc,
     updateDoc,
-    query,
-    where,
 } from "firebase/firestore";
 import { db } from "../Firebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useDispatch, useSelector } from 'react-redux';
+import { useUser } from "../context/authUser";
+import {fetchProducts,  updateProduct, deleteProduct } from "../redux/productSlice";
 
 const ManageProducts = () => {
-    const [products, setProducts] = useState([]);
+    const dispatch = useDispatch();
+    const { user } = useUser();
+    const userEmail = user?.email
     const [editingProduct, setEditingProduct] = useState(null);
     const [form, setForm] = useState({
         name: "",
@@ -24,58 +24,29 @@ const ManageProducts = () => {
         stock: "",
         image: "",  // Add image state
     });
-    const [userEmail, setUserEmail] = useState(null);
-    const [newImage, setNewImage] = useState(null);  // For storing new image before upload
 
-    // Firebase storage reference
+      // Fetch products on component mount
+      useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
+
+    const [newImage, setNewImage] = useState(null);  // For storing new image before upload
     const storage = getStorage();
 
-    // Get logged-in user's email
-    useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUserEmail(user.email);
-            } else {
-                setUserEmail(null);
-            }
-        });
-        return () => unsubscribe();
-    }, []);
+    const { items: products, loading } = useSelector((state) => state.products);
+   
+    console.log("object", products)
+    const product = products.filter((product) => product.email === userEmail);
 
-    // Fetch products from Firestore for the logged-in user
-    useEffect(() => {
-        if (!userEmail) return;
-
-        const fetchProducts = async () => {
-            try {
-                const productsQuery = query(
-                    collection(db, "products"),
-                    where("email", "==", userEmail)
-                );
-                const querySnapshot = await getDocs(productsQuery);
-                const productsList = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-                setProducts(productsList);
-            } catch (error) {
-                console.error("Error fetching products: ", error.message);
-                alert("Failed to fetch products.");
-            }
-        };
-
-        fetchProducts();
-    }, [userEmail]);
 
     // Handle delete product
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this product?")) {
             try {
                 await deleteDoc(doc(db, "products", id));
-                setProducts((prevProducts) =>
-                    prevProducts.filter((product) => product.id !== id)
-                );
+
+                // Update Redux store
+                dispatch(deleteProduct(id));
                 alert("Product deleted successfully.");
             } catch (error) {
                 console.error("Error deleting product: ", error.message);
@@ -87,7 +58,14 @@ const ManageProducts = () => {
     // Start editing a product
     const handleEdit = (product) => {
         setEditingProduct(product.id);
-        setForm(product);
+        // setForm(product);
+
+        setForm({
+            ...product,
+            image: product.images, // Set the existing image to form state
+        });
+
+
     };
 
     // Cancel editing
@@ -114,8 +92,6 @@ const ManageProducts = () => {
     };
 
     const uploadImage = async () => {
-        if (!newImage) return null;
-
         const imageRef = ref(storage, `products/${newImage.name}`);
         try {
             await uploadBytes(imageRef, newImage);
@@ -142,32 +118,35 @@ const ManageProducts = () => {
                 alert("Please fill in all fields.");
                 return;
             }
-
             const parsedPrice = parseFloat(form.price);
             const parsedStock = parseInt(form.stock, 10);
-            
+
             if (isNaN(parsedPrice) || isNaN(parsedStock)) {
                 alert("Price and Stock must be valid numbers.");
                 return;
             }
 
-            let imageUrl = form.image; // Use existing image URL by default
-            if (newImage) {
-                imageUrl = await uploadImage(); // Upload new image if selected
-            }
+            // Find the current product by ID to get its existing image
+            const product = products.find((p) => p.id === editingProduct);
+            const oldImage = product?.images;
 
-            await updateDoc(doc(db, "products", editingProduct), {
+            // Check for new image upload; fallback to the old image
+            let imageUrl = oldImage;
+            if (newImage) {
+                imageUrl = await uploadImage(); // Upload new image and get URL
+            }
+            const updatedProduct = {
                 ...form,
                 price: parsedPrice,
                 stock: parsedStock,
-                image: imageUrl,  // Store image URL in the database
-            });
+                image: imageUrl,
+            };
 
-            setProducts((prevProducts) =>
-                prevProducts.map((product) =>
-                    product.id === editingProduct ? { ...form, id: editingProduct, image: imageUrl } : product
-                )
-            );
+            // Update in Firebase
+            await updateDoc(doc(db, "products", editingProduct), updatedProduct);
+
+            // Update Redux store
+            dispatch(updateProduct({ id: editingProduct, ...updatedProduct }));
 
             alert("Product updated successfully!");
             handleCancel();
@@ -180,48 +159,94 @@ const ManageProducts = () => {
     return (
         <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
             <h2 className="text-2xl font-bold mb-6">Manage Products</h2>
-            {products.length > 0 ? (
-                <table className="w-full border-collapse border border-gray-300">
-                    <thead>
-                        <tr>
-                            <th className="border border-gray-300 px-4 py-2">Name</th>
-                            <th className="border border-gray-300 px-4 py-2">Price</th>
-                            <th className="border border-gray-300 px-4 py-2">Category</th>
-                            <th className="border border-gray-300 px-4 py-2">Image</th>
-                            <th className="border border-gray-300 px-4 py-2">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {products.map((product) => (
-                            <tr key={product.id} className="text-nowrap">
-                                <td className="border border-gray-300 px-4 py-2">{product.name}</td>
-                                <td className="border border-gray-300 px-4 py-2">₹{product.price}</td>
-                                <td className="border border-gray-300 px-4 py-2">{product.category}</td>
-                                <td className="border border-gray-300 px-4 py-2">
-                                    {product.image ? (
-                                        <img src={product.image} alt={product.name} className="w-16 h-16 object-cover" />
-                                    ) : (
-                                        <span>No image</span>
-                                    )}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2">
-                                    <button
-                                        className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
-                                        onClick={() => handleEdit(product)}
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        className="bg-red-500 text-white px-2 py-1 rounded"
-                                        onClick={() => handleDelete(product.id)}
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
+
+
+
+            {loading ? (
+                // Skeleton Loader
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr>
+                                <th className="border border-gray-300 px-4 py-2">Name</th>
+                                <th className="border border-gray-300 px-4 py-2">Price</th>
+                                <th className="border border-gray-300 px-4 py-2">Category</th>
+                                <th className="border border-gray-300 px-4 py-2">Image</th>
+                                <th className="border border-gray-300 px-4 py-2">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {[...Array(5)].map((_, index) => (
+                                <tr key={index} className="animate-pulse">
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        <div className="h-4 bg-gray-300 rounded w-2/3"></div>
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        <div className="h-16 w-16 bg-gray-300 rounded"></div>
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        <div className="h-8 w-16 bg-gray-300 rounded inline-block mr-2"></div>
+                                        <div className="h-8 w-16 bg-gray-300 rounded inline-block"></div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            ) : product.length > 0 ? (
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr>
+                                <th className="border border-gray-300 px-4 py-2">Name</th>
+                                <th className="border border-gray-300 px-4 py-2">Price</th>
+                                <th className="border border-gray-300 px-4 py-2">Category</th>
+                                <th className="border border-gray-300 px-4 py-2">Image</th>
+                                <th className="border border-gray-300 px-4 py-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {product.map((product) => (
+                                <tr key={product.id} className="text-nowrap">
+                                    <td className="border border-gray-300 px-4 py-2">{product.name}</td>
+                                    <td className="border border-gray-300 px-4 py-2">₹{product.price}</td>
+                                    <td className="border border-gray-300 px-4 py-2">{product.category}</td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        {product.image ? (
+                                            <img
+                                                src={product.image}
+                                                alt={product.name}
+                                                className="w-16 h-16 object-cover"
+                                            />
+                                        ) : (
+                                            <span>No image</span>
+                                        )}
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        <button
+                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                            onClick={() => handleEdit(product)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="bg-red-500 text-white px-2 py-1 rounded"
+                                            onClick={() => handleDelete(product.id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             ) : (
                 <div className="text-center text-gray-500 mt-6">
                     <p>No products available.</p>
