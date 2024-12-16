@@ -435,8 +435,7 @@ export default function Navbar() {
                             <div className="relative inline-block cursor-pointer">
                                 <p
                                     className="py-4 px-3 rounded-md hover:bg-blue-500 flex items-center"
-                                    onClick={() => navigate('/ViewCard')}
-
+                                    onClick={() => navigate('/CardDetails')}
                                 >
                                     <FiShoppingCart className="mr-2 text-xl" />
                                     <span

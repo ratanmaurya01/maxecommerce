@@ -1,8 +1,10 @@
-import React from 'react';
+import React from 'react'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-export default function ViewCard() {
+function CardDetails() {
+
+
     const cartItems = useSelector((state) => state.cart.items);
 
     // Group items by ID and calculate their count
@@ -29,13 +31,13 @@ export default function ViewCard() {
         );
     }
 
-    return (
+  return (
+   <>
+    
 
-        <>
-
-            <div className='px-5'>
-                <div className="max-w-4xl mx-auto mt-8 p-4 shadow-lg rounded-lg">
-                    <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
+    <div className='px-10'>
+                <div className="max-w-4xl mx-auto mt-8 p-2 shadow-lg rounded-lg">
+                    <h2 className="text-2xl font-bold mb-4">Your Cart shopping</h2>
                     <ul className="space-y-4">
                         {cartItemsGrouped.map((item, index) => (
                             <li
@@ -59,8 +61,9 @@ export default function ViewCard() {
                     </ul>
                 </div>
             </div>
-
-        
-        </>
-    );
+            
+   </>
+  )
 }
+
+export default CardDetails

@@ -10,7 +10,7 @@ import ManageProducts from './Admin/ManageProduct';
 import { useDispatch } from 'react-redux';
 import { fetchProducts } from './redux/productSlice';
 import ProductDetails from './Product/ProductDetails';
-import ViewCard from './Product/ViewCArd';
+import CardDetails from './Product/CardDetails';
 
 
 function App() {
@@ -34,8 +34,7 @@ function App() {
                     <Route path="/Addproduct" element={<AddProduct />} />
                     <Route path="/product/:id" element={<ProductDetails />} />
                     <Route path="/Manageproduct" element={<ManageProducts />} />
-                    <Route path="/ViewCard" element={<ViewCard />} />
-          
+                    <Route path="/CardDetails" element={<CardDetails />} />
                 </Routes>
             </div>
         </Router>
