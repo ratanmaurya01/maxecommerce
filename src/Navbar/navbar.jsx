@@ -284,7 +284,7 @@ export default function Navbar() {
     const [isModelOpen, setIsModelOpen] = useState(false);
     const [isSearchModel, setIsSearchModel] = useState(false);
     const dropdownRef = useRef(null);
-      
+     
     const cartItems = useSelector((state) => state.cart.items);
     const cartCount = cartItems.length; // Calculate cart count
 
@@ -312,6 +312,7 @@ export default function Navbar() {
         setIsOpen(false);
         setIsDropdownOpen(false);
     };
+
 
     // Handles clicks outside the dropdown
     useEffect(() => {
@@ -434,7 +435,7 @@ export default function Navbar() {
                             <div className="relative inline-block cursor-pointer">
                                 <p
                                     className="py-4 px-3 rounded-md hover:bg-blue-500 flex items-center"
-                                    onClick={() => navigate('/CartPage')}
+                                    onClick={() => navigate('/ViewCard')}
 
                                 >
                                     <FiShoppingCart className="mr-2 text-xl" />

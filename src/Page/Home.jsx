@@ -9,12 +9,13 @@ import FeatureCard from "./FeatureCard";
 export default function Home() {
     const navigate = useNavigate();
     const { items: products, loading } = useSelector((state) => state.products)
-  
-  
+
     //  console.log("product ", products)
     const handleClickProductDetails = (id) => {
         navigate(`/product/${id}`);
     }
+
+
     return (
         <>
             <div className="mt-5 mb-5 relative ">

@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import { addToCart } from '../redux/cartSlice';
-
+import toast, { Toaster } from 'react-hot-toast';
 
 function ProductDetails() {
     const { id } = useParams();
@@ -14,9 +14,9 @@ function ProductDetails() {
         return <div>Product not available </div>
     }
 
-
     const dispatch = useDispatch();
     const handleAddtoCart = () => {
+    toast("Items Added");
         dispatch(addToCart(product));
     }
     
@@ -116,12 +116,12 @@ function ProductDetails() {
                                     <p
                                         className="text-sm font-medium leading-none text-gray-500 dark:text-gray-400"
                                     >
-                                        (5.0)
+                                    (5.0)
                                     </p>
                                     <p
                                         className="text-sm font-medium leading-none text-gray-900 underline hover:no-underline dark:text-white"
                                     >
-                                        345 Reviews
+                                     345 Reviews
                                     </p>
                                 </div>
                             </div>
@@ -257,14 +257,27 @@ function ProductDetails() {
                         </div>
                     </div>
                 </div>
+
                 <div className='py-8 px-8'>
                     <div>
-                        <h6>
+                        <h6 className='font-bold'>
                             Related Products
                         </h6>
                     </div>
                 </div>
             </section>
+
+
+
+            <div>
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+        />
+      </div>
+
+
+
         </div>
     )
 }
