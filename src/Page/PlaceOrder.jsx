@@ -8,12 +8,11 @@ export default function PlaceOrder() {
         <>
             {user ? (
                 <div className="max-w-4xl mx-auto bg-gray-100 p-4 rounded-lg shadow-md">
-         
+
                     <div className="text-center mb-6">
                         <h2 className="text-2xl font-semibold text-gray-800">Place Your Order</h2>
                     </div>
 
-           
                     <div className="bg-white p-4 rounded-lg mb-6 border">
                         <h3 className="text-lg font-medium mb-4">1. Delivery Address</h3>
                         <div className="flex items-start gap-4 p-4 border rounded mb-4">
@@ -78,9 +77,12 @@ export default function PlaceOrder() {
                     </div>
                 </div>
             ) : (
-                <div className="text-center mt-10 text-gray-700">
-                    <p>Please log in to place an order.</p>
-                </div>
+                <>
+                
+                    <div className="text-center mt-10 text-gray-700">
+                        <p>Please log in to place an order.</p>
+                    </div>
+                </>
             )}
         </>
     );
