@@ -6,15 +6,13 @@ import Slider from "./Slider";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FeatureCard from "./FeatureCard";
+import Pagination from "./Pagination";
 export default function Home() {
     const navigate = useNavigate();
     const { items: products, loading } = useSelector((state) => state.products)
-
-    //  console.log("product ", products)
     const handleClickProductDetails = (id) => {
         navigate(`/product/${id}`);
     }
-
 
     return (
         <>
@@ -63,7 +61,12 @@ export default function Home() {
                                 </div>
                             </div>
                         ))}
+
             </div>
+            <div className="flex justify-center items-center mb-5">
+                <Pagination />
+            </div>
+
         </>
     );
 }

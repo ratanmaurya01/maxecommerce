@@ -1,26 +1,26 @@
 import React, { useRef, useState, useEffect } from "react";
 
 export default function Search({ onClose }) {
-    const [searchTerm, setSearchTerm] = useState(""); // Current search input
-    const [recentSearches, setRecentSearches] = useState([]); // Store recent searches
+    const [searchTerm, setSearchTerm] = useState(""); 
+    const [recentSearches, setRecentSearches] = useState([]); 
     const modalRef = useRef(null);
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         if (searchTerm.trim() !== "") {
             setRecentSearches((prev) => {
-                // Add new search term and limit recent searches to 5 items
+                
                 const updatedSearches = [searchTerm, ...prev].slice(0, 5);
                 return updatedSearches;
             });
-            setSearchTerm(""); // Clear the input field after submitting
+            setSearchTerm(""); 
         }
     };
 
     useEffect(() => {
         const handleOutsideClick = (e) => {
             if (modalRef.current && !modalRef.current.contains(e.target)) {
-                onClose(); // Trigger the close function
+                onClose(); 
             }
         };
         document.addEventListener("mousedown", handleOutsideClick);
@@ -28,7 +28,6 @@ export default function Search({ onClose }) {
     }, [onClose]);
 
 
-    
     return (
         <>
 

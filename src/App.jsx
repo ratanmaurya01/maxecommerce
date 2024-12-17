@@ -11,6 +11,8 @@ import { useDispatch } from 'react-redux';
 import { fetchProducts } from './redux/productSlice';
 import ProductDetails from './Product/ProductDetails';
 import CardDetails from './Product/CardDetails';
+import Footer from './Page/Footer';
+import PlaceOrder from './Page/PlaceOrder';
 
 
 function App() {
@@ -35,8 +37,11 @@ function App() {
                     <Route path="/product/:id" element={<ProductDetails />} />
                     <Route path="/Manageproduct" element={<ManageProducts />} />
                     <Route path="/CardDetails" element={<CardDetails />} />
+                    <Route path="/PlaceOrder" element={<PlaceOrder />} />
                 </Routes>
             </div>
+
+             <Footer/>
         </Router>
     );
 }
