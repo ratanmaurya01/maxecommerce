@@ -8,12 +8,12 @@ export default function PlaceOrder() {
         <>
             {user ? (
                 <div className="max-w-4xl mx-auto bg-gray-100 p-4 rounded-lg shadow-md">
-                    {/* Header */}
+         
                     <div className="text-center mb-6">
                         <h2 className="text-2xl font-semibold text-gray-800">Place Your Order</h2>
                     </div>
 
-                    {/* Address Section */}
+           
                     <div className="bg-white p-4 rounded-lg mb-6 border">
                         <h3 className="text-lg font-medium mb-4">1. Delivery Address</h3>
                         <div className="flex items-start gap-4 p-4 border rounded mb-4">
@@ -35,7 +35,6 @@ export default function PlaceOrder() {
                         </button>
                     </div>
 
-                    {/* Order Summary */}
                     <div className="bg-white p-4 rounded-lg mb-6 border">
                         <h3 className="text-lg font-medium mb-4">2. Order Summary</h3>
                         <div className="flex justify-between items-center border-b pb-4 mb-4">
@@ -50,7 +49,6 @@ export default function PlaceOrder() {
                         </div>
                     </div>
 
-                    {/* Payment Section */}
                     <div className="bg-white p-4 rounded-lg mb-6 border">
                         <h3 className="text-lg font-medium mb-4">3. Payment Method</h3>
                         <div className="flex items-center mb-2">
@@ -73,7 +71,6 @@ export default function PlaceOrder() {
                         </div>
                     </div>
 
-                    {/* Place Order Button */}
                     <div className="text-center">
                         <button className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-6 rounded-lg">
                             Place Order
