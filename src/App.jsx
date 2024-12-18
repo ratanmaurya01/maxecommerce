@@ -13,36 +13,42 @@ import ProductDetails from './Product/ProductDetails';
 import CardDetails from './Product/CardDetails';
 import Footer from './Page/Footer';
 import PlaceOrder from './Page/PlaceOrder';
+import PagenotFound from './Page/PagenotFound';
 
 
 function App() {
 
     const dispatch = useDispatch();
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetchProducts());
-    },[dispatch]);
+    }, [dispatch]);
 
     return (
-        <Router>
-            <div className="navbar-container">
-                <Navbar />
-            </div>
-            <div className="content-container">
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/Login" element={<Login />} />
-                    <Route path="/Signin" element={<Singin />} />
-                    <Route path="/Profile" element={<Profile />} />
-                    <Route path="/Addproduct" element={<AddProduct />} />
-                    <Route path="/product/:id" element={<ProductDetails />} />
-                    <Route path="/Manageproduct" element={<ManageProducts />} />
-                    <Route path="/CardDetails" element={<CardDetails />} />
-                    <Route path="/PlaceOrder" element={<PlaceOrder />} />
-                </Routes>
-            </div>
+        <>
+            <Router>
+                <div className="navbar-container">
+                    <Navbar />
+                </div>
+                <div className="content-container">
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/Login" element={<Login />} />
+                        <Route path="/Signin" element={<Singin />} />
+                        <Route path="/Profile" element={<Profile />} />
+                        <Route path="/Addproduct" element={<AddProduct />} />
+                        <Route path="/product/:id" element={<ProductDetails />} />
+                        <Route path="/Manageproduct" element={<ManageProducts />} />
+                        <Route path="/CardDetails" element={<CardDetails />} />
+                        <Route path="/PlaceOrder" element={<PlaceOrder />} />
+                        <Route path="/PagenotFound" element={<PagenotFound />} />
+                    </Routes>
+                </div>
+                <Footer />
+            </Router>
 
-             <Footer/>
-        </Router>
+
+
+        </>
     );
 }
 
