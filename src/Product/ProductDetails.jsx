@@ -16,10 +16,10 @@ function ProductDetails() {
 
     const dispatch = useDispatch();
     const handleAddtoCart = () => {
-    toast("Items Added");
+        toast("Items Added");
         dispatch(addToCart(product));
     }
-    
+
     return (
         <div>
             <section className="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased">
@@ -32,6 +32,17 @@ function ProductDetails() {
                             <img className="w-full hidden dark:block rounded-lg"
                                 src={product.images && product.images[0] ? product.images[0] : 'https://via.placeholder.com/300'}
                                 alt={product.name} />
+
+                            <div>
+
+                                <img className=" mt-5 w-20 h-20 dark:hidden rounded-sm"
+                                    src={product.images && product.images[0] ? product.images[0] : 'https://via.placeholder.com/300'}
+                                    alt={product.name} />
+
+
+                            </div>
+
+
                         </div>
 
                         <div className="mt-6 sm:mt-8 lg:mt-0">
@@ -44,7 +55,6 @@ function ProductDetails() {
                                 >
                                     ₹{product.price}
                                 </p>
-
                                 <div className="flex items-center gap-2 mt-2 sm:mt-0">
                                     <div className="flex items-center gap-1">
                                         <svg
@@ -116,12 +126,12 @@ function ProductDetails() {
                                     <p
                                         className="text-sm font-medium leading-none text-gray-500 dark:text-gray-400"
                                     >
-                                    (5.0)
+                                        (5.0)
                                     </p>
                                     <p
                                         className="text-sm font-medium leading-none text-gray-900 underline hover:no-underline dark:text-white"
                                     >
-                                     345 Reviews
+                                        345 Reviews
                                     </p>
                                 </div>
                             </div>
@@ -257,7 +267,6 @@ function ProductDetails() {
                         </div>
                     </div>
                 </div>
-
                 <div className='py-8 px-8'>
                     <div>
                         <h6 className='font-bold'>
@@ -270,11 +279,11 @@ function ProductDetails() {
 
 
             <div>
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-        />
-      </div>
+                <Toaster
+                    position="top-center"
+                    reverseOrder={false}
+                />
+            </div>
 
 
 
