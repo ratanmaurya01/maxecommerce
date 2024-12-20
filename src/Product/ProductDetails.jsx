@@ -19,7 +19,6 @@ function ProductDetails() {
         toast("Items Added");
         dispatch(addToCart(product));
     }
-
     return (
         <div>
             <section className="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased">
