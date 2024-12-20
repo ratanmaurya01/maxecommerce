@@ -31,17 +31,13 @@ function ProductDetails() {
                             <img className="w-full hidden dark:block rounded-lg"
                                 src={product.images && product.images[0] ? product.images[0] : 'https://via.placeholder.com/300'}
                                 alt={product.name} />
-
+                                
                             <div>
 
                                 <img className=" mt-5 w-20 h-20 dark:hidden rounded-sm"
                                     src={product.images && product.images[0] ? product.images[0] : 'https://via.placeholder.com/300'}
                                     alt={product.name} />
-
-
                             </div>
-
-
                         </div>
 
                         <div className="mt-6 sm:mt-8 lg:mt-0">

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../Firebase";
-import { ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useUser } from "../context/authUser";
 import { useDispatch } from 'react-redux';
 import { addProduct } from "../redux/productSlice";
@@ -21,7 +21,6 @@ const AddProduct = () => {
 
   const [uploading, setUploading] = useState(false); // To track upload progress
   const [error, setError] = useState(null); // To display any error during image upload
-
   const { user } = useUser();
 
   const handleChange = (e) => {
@@ -61,8 +60,8 @@ const AddProduct = () => {
   };
 
 
-  const handleSubmit = async (e) => {
 
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (
@@ -94,19 +93,16 @@ const AddProduct = () => {
         createdAt: serverTimestamp(),
       });
 
-         // Dispatch addProduct to Redux store
-    const newProduct = {
-      ...form,
-      price: parsedPrice,
-      email: user?.email,
-      stock: parsedStock,
-      createdAt: new Date().toISOString(), // Use current time since serverTimestamp can't be directly retrieved
-    };
+      // Dispatch addProduct to Redux store
+      const newProduct = {
+        ...form,
+        price: parsedPrice,
+        email: user?.email,
+        stock: parsedStock,
+        createdAt: new Date().toISOString(), 
+      };
 
-    dispatch(addProduct(newProduct));
-
-
-
+      dispatch(addProduct(newProduct));
 
       toast("Product added successfully!");
       setForm({
@@ -126,6 +122,7 @@ const AddProduct = () => {
     }
   };
 
+  
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold mb-6">Add Product</h2>

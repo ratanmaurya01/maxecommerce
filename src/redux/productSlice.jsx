@@ -18,12 +18,12 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', async ()
                 ...data,
                 createdAt: data.createdAt instanceof Timestamp
                     ? data.createdAt.toDate().toISOString()
-                    : null, // If createdAt is a Timestamp, convert it; otherwise, set to null
+                    : null, 
             };
         });
     } catch (error) {
         console.error('Error fetching products:', error);
-        throw error; // Ensure the error reaches Redux state
+        throw error;
     }
 });
 
@@ -59,6 +59,7 @@ const productSlice = createSlice({
                 state.items[index] = action.payload; // Replace product with updated data
             }
         },
+        
         // Delete product in Redux store
         deleteProduct(state, action) {
             state.items = state.items.filter((product) => product.id !== action.payload);

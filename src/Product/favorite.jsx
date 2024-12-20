@@ -4,7 +4,7 @@ export default function favorite() {
         <div>
             <div>
                 <div>
-                    <p>Your favorite product</p>
+                    <p className='font-sans'>Your favorite product</p>
                 </div>
             </div>
         </div>
