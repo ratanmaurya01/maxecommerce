@@ -6,8 +6,6 @@ import { signOut } from 'firebase/auth';
 // Create the context
 
 const UserContext = createContext();
-
-// Create a provider for the context
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true); 
@@ -35,8 +33,6 @@ export const UserProvider = ({ children }) => {
             }
             setLoading(false);
         });
-
-        // Clean up the listener on component unmount
 
         return () => unsubscribe();
     }, []);

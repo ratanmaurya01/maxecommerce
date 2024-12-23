@@ -8,18 +8,16 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { login } = useUser(); // Get the login function from context
-
+    const { login } = useUser(); 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('')
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
-            console.log(response.user);
-            
-            // Store the user data in context
+           /// console.log(response.user);
+
             login(response.user);
-            navigate('/Profile'); // Redirect to home page
+            navigate('/Profile'); 
         } catch (error) {
             console.log('error',error)
             setError('Invalid email or password');
